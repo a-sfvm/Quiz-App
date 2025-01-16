@@ -2,7 +2,7 @@ import { useState } from "react";
 
 import QuestionTimer from "./QuestionTimer.jsx";
 import Answers from "./Answers.jsx";
-import QUESTIONS from "../qustions.js"
+import QUESTIONS from "../qustions.js";
 
 export default function Question({
   index,
@@ -13,6 +13,16 @@ export default function Question({
     selectedAnswer: '',
     isCorrect: null
   });
+
+  let timer = 10000;
+
+  if (answer.selectedAnswer) {
+    timer = 1000;
+  }
+
+  if (answer.isCorrect !== null) {
+    timer = 2000;
+  }
 
   function handleSelectAnswer(answer) {
     setAnswer({
@@ -43,8 +53,10 @@ export default function Question({
   return (
     <div id="question">
       <QuestionTimer
-        timeout={10000}
-        onTimeout={onSkipAnswer}
+      key={timer}
+        timeout={timer}
+        onTimeout={answer.selectedAnswer === '' ? onSkipAnswer : null}
+        mode={answerState}
       />
       <h2>{QUESTIONS[index].text}</h2>
       <Answers
